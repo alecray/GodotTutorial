@@ -52,20 +52,9 @@ func _on_Player_body_entered(body):
 	emit_signal("hit")
 	# call_deferred ensures appropriate wait time to avoid errors
 	$CollisionShape2D.call_deferred("set_disabled", true)
-	
+
 # Reset player on starting new game
 func start(pos):
 	position = pos
 	show()
 	$CollisionShape2D.disabled = false
-	
-
-
-func game_over():
-	$ScoreTimer.stop()
-	$MobTimer.stop()
-
-func new_game():
-	score = 0
-	$Player.start($StartPosition.position)
-	$StartTimer.start()
