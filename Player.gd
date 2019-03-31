@@ -1,10 +1,10 @@
-#Alec Ray
-#Tutorial on godotengine.org
-#3/31/2019
+# Alec Ray
+# Tutorial on godotengine.org
+# 3/31/2019
 
 extends Area2D
 
-signal hit # For collision
+signal hit # Define signal player emits on collision w/ enemy.
 
 export var speed = 400 # How fast the player will move (px/s).
 var screen_size # Size of the game window.
@@ -15,7 +15,7 @@ func _ready():
 	
 func _process(delta):
 	
-	#Check for input
+	# Check for input
 	var velocity = Vector2() #The player's movement vector. 0,0 by default.
 	if Input.is_action_pressed("ui_right"):
         velocity.x += 1
@@ -45,3 +45,17 @@ func _process(delta):
 	elif velocity.y != 0:
 	    $AnimatedSprite.animation = "up"
 	    $AnimatedSprite.flip_v = velocity.y > 0
+
+# Called whenever the player collides with an enemy
+func _on_Player_body_entered(body):
+	hide()  # Player disappears after being hit.
+	emit_signal("hit")
+	# call_deferred ensures appropriate wait time to avoid errors
+	$CollisionShape2D.call_deferred("set_disabled", true)
+	
+# Reset player on starting new game
+func start(pos):
+	position = pos
+	show()
+	$CollisionShape2D.disabled = false
+	
